@@ -4,6 +4,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import { FlashlightCursor } from "@/components/ui/FlashlightCursor";
+import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Programs from "./pages/Programs";
@@ -20,9 +22,11 @@ const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        <FlashlightCursor />
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <MobileBottomNav />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
