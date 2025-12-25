@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import logo from "@/assets/logo.png";
 
-const navLinks = [
+const desktopNavLinks = [
   { name: "Home", path: "/" },
   { name: "About", path: "/about" },
   { name: "Programs", path: "/programs" },
@@ -12,6 +12,13 @@ const navLinks = [
   { name: "Leadership", path: "/leadership" },
   { name: "Get Involved", path: "/get-involved" },
   { name: "Contact", path: "/contact" },
+];
+
+// Only Impact and Leadership in mobile top nav
+const mobileTopLinks = [
+  { name: "Impact", path: "/impact" },
+  { name: "Leadership", path: "/leadership" },
+  { name: "Donate", path: "/donate" },
 ];
 
 export const Navigation = () => {
@@ -41,14 +48,14 @@ export const Navigation = () => {
           scrolled ? "bg-background/90 backdrop-blur-xl border-b border-border/30" : ""
         }`}
       >
-        <div className="container mx-auto px-6 py-4">
+        <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
-            {/* Logo */}
+            {/* Logo - Bigger size */}
             <Link to="/" className="flex items-center gap-3 group">
               <motion.img
                 src={logo}
                 alt="Beacon of Blessings"
-                className="h-12 w-auto"
+                className="h-14 sm:h-16 lg:h-20 w-auto"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.3 }}
               />
@@ -56,7 +63,7 @@ export const Navigation = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-8">
-              {navLinks.map((link, index) => (
+              {desktopNavLinks.map((link, index) => (
                 <motion.div
                   key={link.path}
                   initial={{ opacity: 0, y: -20 }}
@@ -96,66 +103,27 @@ export const Navigation = () => {
               </motion.div>
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden text-foreground p-2"
-              aria-label="Toggle menu"
-            >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {/* Mobile Top Links + Menu Button */}
+            <div className="flex lg:hidden items-center gap-2 sm:gap-4">
+              {mobileTopLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`font-body text-xs sm:text-sm transition-colors duration-300 ${
+                    link.name === "Donate" 
+                      ? "px-3 sm:px-4 py-1.5 sm:py-2 bg-secondary text-secondary-foreground rounded-full font-medium"
+                      : location.pathname === link.path
+                        ? "text-secondary"
+                        : "text-foreground/70"
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </motion.nav>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, x: "100%" }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: "100%" }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed inset-0 z-40 lg:hidden"
-          >
-            <div className="absolute inset-0 bg-background/95 backdrop-blur-xl">
-              <div className="flex flex-col items-center justify-center h-full gap-8">
-                {navLinks.map((link, index) => (
-                  <motion.div
-                    key={link.path}
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 * index, duration: 0.4 }}
-                  >
-                    <Link
-                      to={link.path}
-                      className={`font-display text-2xl transition-colors duration-300 ${
-                        location.pathname === link.path
-                          ? "text-secondary"
-                          : "text-foreground/70 hover:text-foreground"
-                      }`}
-                    >
-                      {link.name}
-                    </Link>
-                  </motion.div>
-                ))}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8, duration: 0.4 }}
-                >
-                  <Link
-                    to="/donate"
-                    className="mt-4 px-8 py-3 bg-secondary text-secondary-foreground rounded-full font-body text-lg font-medium"
-                  >
-                    Donate Now
-                  </Link>
-                </motion.div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   );
 };
