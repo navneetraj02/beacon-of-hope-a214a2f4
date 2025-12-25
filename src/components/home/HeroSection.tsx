@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
+import childrenImage from "@/assets/children-school.jpg";
 
 export const HeroSection = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -89,31 +90,52 @@ export const HeroSection = () => {
             Helping Hands, Healing Hearts
           </motion.p>
 
-          {/* Main Title */}
-          <motion.h1
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 1.3 }}
-            className="font-display text-4xl md:text-6xl lg:text-7xl text-foreground leading-tight mb-8"
-          >
-            A Light Rises{" "}
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 2 }}
-              className="text-gradient-gold"
+          {/* Main Title with Children Image */}
+          <div className="relative">
+            <motion.h1
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, delay: 1.3 }}
+              className="font-display text-4xl md:text-6xl lg:text-7xl text-foreground leading-tight mb-8"
             >
-              Where Hope
-            </motion.span>
-            <br />
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 2.5 }}
-            >
-              Was Needed Most
-            </motion.span>
-          </motion.h1>
+              A Light Rises{" "}
+              <span className="relative inline-block">
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 1, delay: 2 }}
+                  className="text-gradient-gold"
+                >
+                  Where Hope
+                </motion.span>
+                {/* Children image appearing behind "Where Hope" */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 1.5, delay: 2.2 }}
+                  className="absolute -bottom-20 md:-bottom-32 left-1/2 -translate-x-1/2 w-48 md:w-72 lg:w-96 z-[-1]"
+                >
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-secondary/30 rounded-2xl blur-2xl" />
+                    <img
+                      src={childrenImage}
+                      alt="Children with hope"
+                      className="rounded-2xl shadow-beacon opacity-80 w-full h-auto object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent rounded-2xl" />
+                  </div>
+                </motion.div>
+              </span>
+              <br />
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 2.5 }}
+              >
+                Was Needed Most
+              </motion.span>
+            </motion.h1>
+          </div>
 
           {/* Description */}
           <motion.p

@@ -23,15 +23,45 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      // Using Web3Forms to send email to lionel@apotitech.com
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "YOUR_ACCESS_KEY_HERE", // User needs to get this from web3forms.com
+          to_email: "lionel@apotitech.com",
+          from_name: formData.name,
+          email: formData.email,
+          subject: `[Beacon of Blessings] ${formData.subject}: Message from ${formData.name}`,
+          message: formData.message,
+        }),
+      });
 
-    toast({
-      title: "Message Sent",
-      description: "Thank you for reaching out! We'll get back to you soon.",
-    });
+      const result = await response.json();
 
-    setFormData({ name: "", email: "", subject: "", message: "" });
+      if (result.success) {
+        toast({
+          title: "Message Sent Successfully!",
+          description: "Thank you for reaching out! We'll get back to you soon.",
+        });
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      } else {
+        throw new Error("Failed to send");
+      }
+    } catch (error) {
+      // Fallback: Open email client with pre-filled data
+      const mailtoLink = `mailto:lionel@apotitech.com?subject=${encodeURIComponent(`[Beacon of Blessings] ${formData.subject}`)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)}`;
+      window.open(mailtoLink, '_blank');
+      
+      toast({
+        title: "Opening Email Client",
+        description: "Please send the email from your email application.",
+      });
+    }
+
     setIsSubmitting(false);
   };
 
