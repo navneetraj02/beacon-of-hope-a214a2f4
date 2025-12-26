@@ -148,6 +148,55 @@ const Contact = () => {
             </div>
           </div>
         </section>
+
+        {/* Map Section */}
+        <section className="py-24 relative">
+          <div className="container mx-auto px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="max-w-6xl mx-auto"
+            >
+              <div className="text-center mb-12">
+                <span className="inline-block font-body text-xs tracking-[0.4em] uppercase text-secondary mb-4">
+                  Our Location
+                </span>
+                <h2 className="font-display text-3xl md:text-4xl text-foreground mb-4">
+                  Find Us in <span className="text-gradient-gold">Nigeria</span>
+                </h2>
+                <p className="font-body text-muted-foreground max-w-xl mx-auto">
+                  Our operations are centered in Nigeria, bringing hope and support to communities across the nation.
+                </p>
+              </div>
+
+              <div className="glass-card rounded-3xl overflow-hidden">
+                <iframe
+                  title="Beacon of Blessings Location - Nigeria"
+                  src="https://www.openstreetmap.org/export/embed.html?bbox=2.6917%2C4.2406%2C14.6778%2C13.8659&layer=mapnik&marker=9.0820%2C8.6753"
+                  width="100%"
+                  height="450"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  className="w-full"
+                />
+              </div>
+
+              <div className="flex justify-center mt-6">
+                <a
+                  href="https://www.openstreetmap.org/?mlat=9.0820&mlon=8.6753#map=6/9.0820/8.6753"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 font-body text-sm text-secondary hover:text-secondary/80 transition-colors"
+                >
+                  <MapPin className="w-4 h-4" />
+                  View larger map
+                </a>
+              </div>
+            </motion.div>
+          </div>
+        </section>
       </main>
 
       <Footer />
