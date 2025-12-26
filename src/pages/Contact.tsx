@@ -1,73 +1,30 @@
 import { Helmet } from "react-helmet-async";
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useEffect } from "react";
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { AIChatbot } from "@/components/chat/AIChatbot";
-import { Phone, MapPin, Send } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Phone, MapPin } from "lucide-react";
 
 const Contact = () => {
   const heroRef = useRef(null);
   const heroInView = useInView(heroRef, { once: true });
-  const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  useEffect(() => {
+    // Load Fillout embed script
+    const script = document.createElement("script");
+    script.src = "https://server.fillout.com/embed/v1/";
+    script.async = true;
+    document.body.appendChild(script);
 
-    try {
-      // Using FormSubmit.co - no signup required, just use your email
-      const response = await fetch("https://formsubmit.co/ajax/lionel@apotitech.com", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          subject: `[Beacon of Blessings] ${formData.subject}`,
-          message: formData.message,
-          _subject: `[Beacon of Blessings] ${formData.subject}: Message from ${formData.name}`,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        toast({
-          title: "Message Sent Successfully!",
-          description: "Thank you for reaching out! We'll get back to you soon.",
-        });
-        setFormData({ name: "", email: "", subject: "", message: "" });
-      } else {
-        throw new Error("Failed to send");
+    return () => {
+      // Cleanup script on unmount
+      const existingScript = document.querySelector('script[src="https://server.fillout.com/embed/v1/"]');
+      if (existingScript) {
+        existingScript.remove();
       }
-    } catch (error) {
-      // Fallback: Open email client with pre-filled data
-      const mailtoLink = `mailto:lionel@apotitech.com?subject=${encodeURIComponent(`[Beacon of Blessings] ${formData.subject}`)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)}`;
-      window.open(mailtoLink, '_blank');
-      
-      toast({
-        title: "Opening Email Client",
-        description: "Please send the email from your email application.",
-      });
-    }
-
-    setIsSubmitting(false);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    };
+  }, []);
 
   return (
     <>
@@ -114,16 +71,17 @@ const Contact = () => {
           </div>
         </section>
 
-        {/* Contact Info + Form */}
+        {/* Contact Info + Fillout Form */}
         <section className="py-24 relative">
           <div className="container mx-auto px-6">
-            <div className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
+            <div className="grid lg:grid-cols-5 gap-12 max-w-6xl mx-auto">
               {/* Contact Info */}
               <motion.div
                 initial={{ opacity: 0, x: -40 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
+                className="lg:col-span-2"
               >
                 <h2 className="font-display text-2xl text-foreground mb-8">
                   Reach Out Directly
@@ -162,106 +120,30 @@ const Contact = () => {
                 </div>
               </motion.div>
 
-              {/* Contact Form */}
+              {/* Fillout Form Embed */}
               <motion.div
                 initial={{ opacity: 0, x: 40 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2 }}
+                className="lg:col-span-3"
               >
-                <form onSubmit={handleSubmit} className="glass-card rounded-3xl p-8">
-                  <h2 className="font-display text-2xl text-foreground mb-6">
+                <div className="glass-card rounded-3xl p-4 overflow-hidden">
+                  <h2 className="font-display text-2xl text-foreground mb-4 px-4 pt-4">
                     Send a Message
                   </h2>
-
-                  <div className="space-y-5">
-                    <div>
-                      <label htmlFor="name" className="block font-body text-sm text-muted-foreground mb-2">
-                        Your Name
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl bg-muted/30 border border-border focus:border-secondary/50 focus:outline-none transition-colors font-body text-foreground placeholder:text-muted-foreground"
-                        placeholder="John Doe"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="email" className="block font-body text-sm text-muted-foreground mb-2">
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl bg-muted/30 border border-border focus:border-secondary/50 focus:outline-none transition-colors font-body text-foreground placeholder:text-muted-foreground"
-                        placeholder="john@example.com"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="subject" className="block font-body text-sm text-muted-foreground mb-2">
-                        Subject
-                      </label>
-                      <select
-                        id="subject"
-                        name="subject"
-                        value={formData.subject}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl bg-muted/30 border border-border focus:border-secondary/50 focus:outline-none transition-colors font-body text-foreground"
-                      >
-                        <option value="">Select a subject</option>
-                        <option value="general">General Inquiry</option>
-                        <option value="volunteer">Volunteering</option>
-                        <option value="partnership">Partnership</option>
-                        <option value="donation">Donation Question</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label htmlFor="message" className="block font-body text-sm text-muted-foreground mb-2">
-                        Message
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        required
-                        rows={5}
-                        className="w-full px-4 py-3 rounded-xl bg-muted/30 border border-border focus:border-secondary/50 focus:outline-none transition-colors font-body text-foreground placeholder:text-muted-foreground resize-none"
-                        placeholder="Your message..."
-                      />
-                    </div>
-
-                    <motion.button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full px-6 py-4 bg-secondary text-secondary-foreground rounded-full font-body font-medium hover:shadow-glow transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      {isSubmitting ? (
-                        "Sending..."
-                      ) : (
-                        <>
-                          Send Message
-                          <Send className="w-4 h-4" />
-                        </>
-                      )}
-                    </motion.button>
+                  <div 
+                    className="w-full rounded-2xl overflow-hidden"
+                    style={{ minHeight: "600px" }}
+                  >
+                    <div
+                      data-fillout-id="9fpMZb4V9Mus"
+                      data-fillout-embed-type="standard"
+                      data-fillout-inherit-parameters
+                      style={{ width: "100%", height: "600px" }}
+                    />
                   </div>
-                </form>
+                </div>
               </motion.div>
             </div>
           </div>
