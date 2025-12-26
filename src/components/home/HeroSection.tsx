@@ -15,10 +15,25 @@ export const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated Background Layers */}
+      {/* Full Hero Background with Children Image */}
       <div className="absolute inset-0">
-        {/* Base gradient */}
-        <div className="absolute inset-0 bg-gradient-depth" />
+        {/* Children image as full background */}
+        <motion.div
+          initial={{ opacity: 0, scale: 1.1 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 2, ease: "easeOut" }}
+          className="absolute inset-0"
+          style={{ transform: `translateY(${scrollY * 0.3}px)` }}
+        >
+          <img
+            src={childrenImage}
+            alt="Children of hope"
+            className="w-full h-full object-cover"
+          />
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
+          <div className="absolute inset-0 bg-primary/40" />
+        </motion.div>
         
         {/* Beacon glow effect */}
         <motion.div
@@ -28,7 +43,7 @@ export const HeroSection = () => {
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px]"
           style={{ transform: `translate(-50%, ${scrollY * -0.2}px)` }}
         >
-          <div className="w-full h-full bg-gradient-hero opacity-80" />
+          <div className="w-full h-full bg-gradient-hero opacity-60" />
         </motion.div>
 
         {/* Floating particles */}
@@ -90,52 +105,31 @@ export const HeroSection = () => {
             Helping Hands, Healing Hearts
           </motion.p>
 
-          {/* Main Title with Children Image */}
-          <div className="relative">
-            <motion.h1
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.2, delay: 1.3 }}
-              className="font-display text-4xl md:text-6xl lg:text-7xl text-foreground leading-tight mb-8"
+          {/* Main Title */}
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, delay: 1.3 }}
+            className="font-display text-4xl md:text-6xl lg:text-7xl text-foreground leading-tight mb-8 drop-shadow-lg"
+          >
+            A Light Rises{" "}
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 2 }}
+              className="text-gradient-gold"
             >
-              A Light Rises{" "}
-              <span className="relative inline-block">
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 1, delay: 2 }}
-                  className="text-gradient-gold"
-                >
-                  Where Hope
-                </motion.span>
-                {/* Children image appearing behind "Where Hope" */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 1.5, delay: 2.2 }}
-                  className="absolute -bottom-20 md:-bottom-32 left-1/2 -translate-x-1/2 w-48 md:w-72 lg:w-96 z-[-1]"
-                >
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-secondary/30 rounded-2xl blur-2xl" />
-                    <img
-                      src={childrenImage}
-                      alt="Children with hope"
-                      className="rounded-2xl shadow-beacon opacity-80 w-full h-auto object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent rounded-2xl" />
-                  </div>
-                </motion.div>
-              </span>
-              <br />
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1, delay: 2.5 }}
-              >
-                Was Needed Most
-              </motion.span>
-            </motion.h1>
-          </div>
+              Where Hope
+            </motion.span>
+            <br />
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 2.5 }}
+            >
+              Was Needed Most
+            </motion.span>
+          </motion.h1>
 
           {/* Description */}
           <motion.p
