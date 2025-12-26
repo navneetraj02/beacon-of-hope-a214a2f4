@@ -24,19 +24,19 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Using Web3Forms to send email to lionel@apotitech.com
-      const response = await fetch("https://api.web3forms.com/submit", {
+      // Using FormSubmit.co - no signup required, just use your email
+      const response = await fetch("https://formsubmit.co/ajax/lionel@apotitech.com", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept": "application/json",
         },
         body: JSON.stringify({
-          access_key: "YOUR_ACCESS_KEY_HERE", // User needs to get this from web3forms.com
-          to_email: "lionel@apotitech.com",
-          from_name: formData.name,
+          name: formData.name,
           email: formData.email,
-          subject: `[Beacon of Blessings] ${formData.subject}: Message from ${formData.name}`,
+          subject: `[Beacon of Blessings] ${formData.subject}`,
           message: formData.message,
+          _subject: `[Beacon of Blessings] ${formData.subject}: Message from ${formData.name}`,
         }),
       });
 
